@@ -1,5 +1,7 @@
 #### 빅데이터 sub2
 
+## GIT 구조 [참고링크](https://gmlwjd9405.github.io/2018/05/11/types-of-git-branch.html)
+- master - dev - feature
 
 ```
 카드 내역
