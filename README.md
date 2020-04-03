@@ -3,6 +3,11 @@
 ## GIT 구조 [참고링크](https://gmlwjd9405.github.io/2018/05/11/types-of-git-branch.html)
 - master - dev - feature
 
+## 와이어프레임
+![와프1](./document/특화_와이어프레임1.png)
+![와프2](./document/특화_와이어프레임2.png)
+
+
 ```
 카드 내역
 음식점
