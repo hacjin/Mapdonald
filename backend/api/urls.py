@@ -13,5 +13,5 @@ router.register(r"stores", views.StoreViewSet, basename="stores")
 urlpatterns = [
     url(r'swagger-ui.html', schema_view),
 ]
-## http://127.0.0.1:8000/api/swagger-ui.html 로 접속하면 가능해짐
+## http://127.0.0.1:8000/api/swagger-ui.html 로 접속하면 가능해짐.
 urlpatterns += router.urls
