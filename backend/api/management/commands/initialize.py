@@ -7,7 +7,7 @@ from api import models
 
 class Command(BaseCommand):
     help = "initialize database"
-    DATA_DIR = Path(settings.BASE_DIR).parent.parent / "data"
+    DATA_DIR = Path(settings.BASE_DIR).parent / "data"
     DATA_FILE = str(DATA_DIR / "dump.pkl")
 
     def _load_dataframes(self):
