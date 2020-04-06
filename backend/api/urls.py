@@ -16,6 +16,7 @@ urlpatterns = [
 
 ]
 ## http://127.0.0.1:8000/api/swagger-ui.html 로 접속하면 가능해짐.
+## 다음 명령어 실행
 ## python manage.py runserver
 
 urlpatterns += router.urls
