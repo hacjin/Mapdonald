@@ -10,8 +10,12 @@ router = DefaultRouter(
     trailing_slash=False
 )
 router.register(r"stores", views.StoreViewSet, basename="stores")
+router.register(r'user', views.UserViewSet, basename="user")
 urlpatterns = [
     url(r'swagger-ui.html', schema_view),
+
 ]
 ## http://127.0.0.1:8000/api/swagger-ui.html 로 접속하면 가능해짐.
+## python manage.py runserver
+
 urlpatterns += router.urls
