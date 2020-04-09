@@ -92,17 +92,18 @@ def import_data(data_path=DATA_FILE):
                 "|".join(categories),
             ]
         )
+        if(d["review_cnt"] > 0):
+            for review in d["review_list"]:
+                r = review["review_info"]
+                u = review["writer_info"]
 
-        for review in d["review_list"]:
-            r = review["review_info"]
-            u = review["writer_info"]
-
-            reviews.append(
-                [r["id"], d["id"], u["id"], r["score"], r["content"], r["reg_time"]]
-            )
-            users.append(
-                [u["id"], u["gender"], dt - int(u["born_year"])+1]
-            )
+                reviews.append(
+                    [r["id"], d["id"], u["id"], r["score"],
+                        r["content"], r["reg_time"]]
+                )
+                users.append(
+                    [u["id"], u["gender"], dt - int(u["born_year"])+1]
+                )
 
         index = 0
         for m in d["menu_list"]:
@@ -157,6 +158,7 @@ def main():
     print("[리뷰]")
     print(f"{separater}\n")
     print(data["reviews"].head())
+    print(data["reviews"].shape())
     print(f"\n{separater}\n\n")
 
     print("[메뉴]")
