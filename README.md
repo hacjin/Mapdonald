@@ -3,15 +3,16 @@
 ## GIT 구조 [참고링크](https://gmlwjd9405.github.io/2018/05/11/types-of-git-branch.html)
 - master - dev - feature
 
+## [AWS 정리 링크](document/AWS_.md)
+## [REST 정리 링크](document/rest_api.md)
+
+
 ## 와이어프레임
 ![와프1](./document/특화_와이어프레임1.png)
 ![와프2](./document/특화_와이어프레임2.png)
 
 ## 시퀀스 다이어그램
 ![시다](document/시퀀스&#32;다이어그램.png)
-
-# [AWS](document/AWS_.md)
-# [REST](document/rest_api.md)
 
 
 
