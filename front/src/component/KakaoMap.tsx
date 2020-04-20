@@ -18,9 +18,13 @@ export default function KakaoMap(){
     useEffect(() => { 
         makeMap()
         // 현재 위치정보 권한 요청
-        navigator.geolocation.getCurrentPosition(geoSuccess)
-    }, [])
+        getCurrentPosition()
+    }, [getCurrentPosition])
     
+    function getCurrentPosition(){
+      navigator.geolocation.getCurrentPosition(geoSuccess)
+    }
+
     // 현재 위치 정보 권한에 동의 받았을 때
     function geoSuccess (position : any){
         const latitude = position.coords.latitude 
