@@ -16,14 +16,10 @@ export default function KakaoMap(){
     let map : any;
     const kakao = window.kakao
     useEffect(() => { 
-        makeMap()
-        // 현재 위치정보 권한 요청
-        getCurrentPosition()
-    }, [getCurrentPosition])
-    
-    function getCurrentPosition(){
+      makeMap()
+      // 현재 위치정보 권한 요청
       navigator.geolocation.getCurrentPosition(geoSuccess)
-    }
+    })
 
     // 현재 위치 정보 권한에 동의 받았을 때
     function geoSuccess (position : any){
