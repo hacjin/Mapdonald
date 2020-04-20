@@ -19,3 +19,15 @@ class StoreViewSet(viewsets.ModelViewSet):
             models.Store.objects.all().filter(store_name__contains=name).order_by("id")
         )
         return queryset
+
+class UserViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.UserSerializer
+    pagination_class = SmallPagination
+
+    def get_queryset(self):
+        name = self.request.query_params.get("name", "")
+        queryset = (
+            models.User.objects.all().order_by("id")
+        )
+        return queryset
+
