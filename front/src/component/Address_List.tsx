@@ -1,4 +1,3 @@
-/*global kakao*/
 import React, { useEffect, FormEvent } from 'react'
 declare global {
   // kakao 변수가 스크립트 파일로 인하여 window 변수 안에 할당되는데, 타입스크립트 특성상 미리 타입에 대하여 선언을 해줘야 함
@@ -7,82 +6,30 @@ declare global {
   }
 }
 
-// 디폴트 역삼역
-const DEFAULT_LATITUDE = 37.501392
-const DEFAULT_LONGITUDE = 127.039648
-
-export default function KakaoMap() {
-  let point: any
-  let id: number
-  var markers: any = []
-  let map: any
-  var ps: any
-  let infowindow: any
-  var keyword: any
-  const kakao = window.kakao
+var markers: any = []
+let map: any
+var ps: any
+let infowindow: any
+var keyword: any
+function Address_List() {
+  // 마커를 담을 배열입니다
   useEffect(() => {
-    makeMap()
-    // 현재 위치정보 권한 요청
-    navigator.geolocation.getCurrentPosition(geoSuccess)
-  }, [])
-  // watchposition 함수를 이용해 위치 정보 갱신 - 클릭 이벤트 https://unikys.tistory.com/375
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+      mapOption = {
+        center: new window.kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+        level: 3, // 지도의 확대 레벨
+      }
 
-  // 현재 위치 정보 권한에 동의 받았을 때
-  function geoSuccess(position: any) {
-    const latitude = position.coords.latitude
-    const longitude = position.coords.longitude
-    console.log(latitude, longitude)
-    moveMap(latitude, longitude)
-    navigator.geolocation.clearWatch(id)
-  }
-  function handleLocate() {
-    id = navigator.geolocation.watchPosition(geoSuccess)
-  }
+    // 지도를 생성합니다
+    map = new window.kakao.maps.Map(mapContainer, mapOption)
 
-  // 처음 카카오맵을 생성
-  function makeMap() {
-    const container = document.getElementById('map') //지도를 담을 영역의 DOM 레퍼런스
-    const options = {
-      //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE), //지도의 중심좌표.
-      level: 3, //지도의 레벨(확대, 축소 정도)
-    }
-
-    map = new kakao.maps.Map(container, options) //지도 객체 생성
     // 장소 검색 객체를 생성합니다
     ps = new window.kakao.maps.services.Places()
 
     // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
     infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 })
+  }, [])
 
-    const mapTypeControl = new kakao.maps.MapTypeControl() // 지도, 스카이뷰 컨트롤러
-    const zoomControl = new kakao.maps.ZoomControl() // 확대, 축소 컨트롤러
-
-    const wardImage = '/ward.png'
-
-    const imageSize = new kakao.maps.Size(64, 69)
-    const imageOption = { offset: new kakao.maps.Point(27, 69) }
-
-    const markerImage = new kakao.maps.MarkerImage(wardImage, imageSize, imageOption)
-
-    point = new kakao.maps.Marker({
-      position: map.getCenter(),
-      image: markerImage,
-    })
-
-    // 컨트롤러 붙이기
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT)
-    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT)
-    point.setMap(map)
-  }
-
-  // 전달 받은 위도, 경도로 카카오맵을 이동시키는 함수
-  function moveMap(latitude: number, longitude: number) {
-    const moveLocation = new window.kakao.maps.LatLng(latitude, longitude)
-
-    point.setPosition(moveLocation)
-    map.panTo(moveLocation)
-  }
   // 키워드 검색을 요청하는 함수입니다
   function searchPlaces(e: FormEvent) {
     e.preventDefault()
@@ -137,33 +84,28 @@ export default function KakaoMap() {
       let title: string = places[i].place_name
       // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
       // LatLngBounds 객체에 좌표를 추가합니다
-      bounds.extend(placePosition) // 마커와 검색결과 항목에 mouseover 했을때
+      bounds.extend(placePosition)
+      // 마커와 검색결과 항목에 mouseover 했을때
       // 해당 장소에 인포윈도우에 장소명을 표시합니다
       // mouseout 했을 때는 인포윈도우를 닫습니다
-      ;(function (y: any, x: any, marker: any, title: any) {
-        window.kakao.maps.event.addListener(marker, 'click', function () {
-          console.log(y, x)
-        })
-        window.kakao.maps.event.addListener(marker, 'mouseover', function () {
+
+      window.kakao.maps.event.addListener(marker, 'mouseover', function () {
+        displayInfowindow(marker, title)
+      })
+
+      window.kakao.maps.event.addListener(marker, 'mouseout', function () {
+        infowindow.close()
+      })
+      if (itemEl !== null) {
+        itemEl.onmouseover = function () {
           displayInfowindow(marker, title)
-        })
-
-        window.kakao.maps.event.addListener(marker, 'mouseout', function () {
-          infowindow.close()
-        })
-        if (itemEl !== null) {
-          itemEl.onmouseover = function () {
-            displayInfowindow(marker, title)
-          }
-
-          itemEl.onmouseout = function () {
-            infowindow.close()
-          }
-          itemEl.onclick = function () {
-            console.log(y, x)
-          }
         }
-      })(places[i].y, places[i].x, marker, places[i].place_name)
+
+        itemEl.onmouseout = function () {
+          infowindow.close()
+        }
+      }
+
       fragment.appendChild(itemEl)
     }
 
@@ -178,15 +120,15 @@ export default function KakaoMap() {
   // 검색결과 항목을 Element로 반환하는 함수입니다
   function getListItem(index: number, places: any) {
     var el = document.createElement('li'),
-      itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' + '<div class="info">' + '   <h5>' + places.place_name + '</h5>'
+      itemStr = '<span className="markerbg marker_' + (index + 1) + '"></span>' + '<div className="info">' + '   <h5>' + places.place_name + '</h5>'
 
     if (places.road_address_name) {
-      itemStr += '    <span>' + places.road_address_name + '</span>' + '   <span class="jibun gray">' + places.address_name + '</span>'
+      itemStr += '    <span>' + places.road_address_name + '</span>' + '   <span className="jibun gray">' + places.address_name + '</span>'
     } else {
       itemStr += '    <span>' + places.address_name + '</span>'
     }
 
-    itemStr += '  <span class="tel">' + places.phone + '</span>' + '</div>'
+    itemStr += '  <span className="tel">' + places.phone + '</span>' + '</div>'
 
     el.innerHTML = itemStr
     el.className = 'item'
@@ -271,28 +213,23 @@ export default function KakaoMap() {
     }
   }
   return (
-    <div id="map_wraper">
-      <div className="map_wrap">
-        <div id="map" style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
-          <button id="location" onClick={handleLocate}>
-            버튼
-          </button>
-        </div>
-        <div id="menu_wrap" className="bg_white">
-          <div className="option">
-            <b>찾고자 하는 주소를 입력해주세요</b>
-            <div>
-              <form onSubmit={searchPlaces}>
-                키워드 : <input type="text" id="keyword" size={15} />
-                <button type="submit">검색하기</button>
-              </form>
-            </div>
+    <div className="map_wrap">
+      <div id="map" style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}></div>
+      <div id="menu_wrap" className="bg_white">
+        <div className="option">
+          <div>
+            <form onSubmit={searchPlaces}>
+              키워드 : <input type="text" id="keyword" style={{ fontSize: 15 }} />
+              <button type="submit">검색하기</button>
+            </form>
           </div>
-          <hr />
-          <ul id="placesList"></ul>
-          <div id="pagination"></div>
         </div>
+        <hr />
+        <ul id="placesList"></ul>
+        <div id="pagination"></div>
       </div>
     </div>
   )
 }
+
+export default Address_List
