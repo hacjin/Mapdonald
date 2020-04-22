@@ -10,21 +10,16 @@ declare global {
 // 디폴트 역삼역
 const DEFAULT_LATITUDE =  37.501392
 const DEFAULT_LONGITUDE =  127.039648
-console.log("전역")
+
 export default function KakaoMap(){
 
     let map : any;
     const kakao = window.kakao
     useEffect(() => { 
-	console.log(kakao)
-        makeMap()
-        // 현재 위치정보 권한 요청
-        getCurrentPosition()
-    },[])
-    
-    function getCurrentPosition(){
+      makeMap()
+      // 현재 위치정보 권한 요청
       navigator.geolocation.getCurrentPosition(geoSuccess)
-    }
+    })
 
     // 현재 위치 정보 권한에 동의 받았을 때
     function geoSuccess (position : any){
@@ -67,7 +62,7 @@ export default function KakaoMap(){
 
     // 전달 받은 위도, 경도로 카카오맵을 이동시키는 함수
     function moveMap(latitude : number, longitude : number){  
-        const moveLocation = new kakao.maps.LatLng(latitude, longitude)
+        const moveLocation = new window.kakao.maps.LatLng(latitude, longitude)
         map.panTo(moveLocation)
     }
 
@@ -79,3 +74,4 @@ export default function KakaoMap(){
         </div>
     )
 }
+
