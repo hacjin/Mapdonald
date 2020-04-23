@@ -2,6 +2,8 @@
 import React, {useEffect, useState} from 'react';
 import FormDialog from './FormDialog';
 import StoreDetailDialog from './StoreDetailDialog';
+import Store from '../interface/Store';
+import apis from '../apis/apis';
 declare global {
     // kakao 변수가 스크립트 파일로 인하여 window 변수 안에 할당되는데, 타입스크립트 특성상 미리 타입에 대하여 선언을 해줘야 함
     interface Window {  
@@ -22,7 +24,25 @@ let map : any;
 let watchId : number;
 export default function KakaoMap(){
   const [detail, setDetail] = useState(false)
-  const dummyStoreId = 1
+  const [store, setStore] = useState()
+  const dummyStore = {
+    id : 1,
+    store_name : ",",
+    branch : "zzz",
+    area : "zzz",
+    tel : "zzz",
+    address : "zzz",
+    latitude : 3,
+    longitude : 4,
+    category_list : ["zzz","zzz","zzz"],
+  }
+
+  async function getStoreAPI(){
+    const response =  await apis.get(`/stores/1`)
+    console.log(response)
+    setStore(response.data)
+  }
+
   useEffect(() => { 
     if(!map){  
       makeMap()
@@ -33,8 +53,15 @@ export default function KakaoMap(){
   
   function detailMethod(){
     setDetail(true)
+    getStoreAPI()
   }
 
+
+  function retDetail(){
+    if(store){
+      return <StoreDetailDialog open={detail} setOpen={setDetail} store={store}/>
+    }
+  }
   function getCurrentPositionPermission(){    
     navigator.geolocation.getCurrentPosition(geoSuccess)
     getCurrentPosition()
@@ -61,8 +88,6 @@ export default function KakaoMap(){
     navigator.geolocation.clearWatch(watchId)
   }
 
-
-
   // 처음 카카오맵을 생성
   function makeMap(){ 
     const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
@@ -85,13 +110,14 @@ export default function KakaoMap(){
     const moveLocation = new window.kakao.maps.LatLng(latitude, longitude)
     map.panTo(moveLocation)
   }
+
   return(
     <div>
       <div id="map" style={{width:"800px", height:"400px"}}>
         <FormDialog/>
-        <button style={{zIndex:3, position:"absolute"}} onClick={getCurrentPosition}> 현재 위치 </button>
-        <button style={{zIndex:3,position:"absolute"}} onClick={detailMethod}> 디테일 </button>
-        <StoreDetailDialog open={detail} setOpen={setDetail} store={dummyStoreId}/>
+        <button style={{zIndex:3, top : "3px", left : "3px", position:"absolute"}} onClick={getCurrentPosition}> 현재 위치 </button>
+        <button style={{zIndex:3, top : "50px",left : "10px", position:"absolute"}} onClick={detailMethod}> 디테일 </button>
+        {retDetail()}
       </div>
     </div>
   )
