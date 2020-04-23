@@ -1,5 +1,6 @@
 from .models import Store
 from .models import User
+from .models import Review
 from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
@@ -13,7 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
             "latitude",
             "longitude",
         ]
-
 
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,3 +29,16 @@ class StoreSerializer(serializers.ModelSerializer):
             "longitude",
             "category_list",
         ]
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = [
+            "rid",
+            "store",
+            "score",
+            "content",
+            "reg_time",
+        ]
+
+

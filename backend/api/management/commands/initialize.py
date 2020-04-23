@@ -8,6 +8,7 @@ from api import models
 class Command(BaseCommand):
     help = "initialize database"
     DATA_DIR = Path(settings.BASE_DIR).parent / "data"
+    #DATA_DIR = Path(settings.BASE_DIR).parent / "data"
     DATA_FILE = str(DATA_DIR / "dump.pkl")
 
     def _load_dataframes(self):
@@ -42,7 +43,23 @@ class Command(BaseCommand):
             )
             for store in stores.itertuples()
         ]
+
         models.Store.objects.bulk_create(stores_bulk)
+
+        print("[*] Initializing reviews...")
+        models.Review.objects.all().delete()
+        reviews = dataframes["reviews"]
+        reviews_bulk = [
+            models.Review(
+                rid=review.id,
+                store=review.store,
+                score=review.score,
+                content=review.content,
+                reg_time=review.reg_time,
+            )
+            for review in reviews.itertuples()
+        ]
+        models.Review.objects.bulk_create(reviews_bulk)
 
         print("[+] Done")
 

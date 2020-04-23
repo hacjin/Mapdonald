@@ -11,6 +11,8 @@ router = DefaultRouter(
 )
 router.register(r"stores", views.StoreViewSet, basename="stores")
 router.register(r'user', views.UserViewSet, basename="user")
+router.register(r'review', views.ReviewViewSet, basename="review")
+
 urlpatterns = [
     url(r'swagger-ui.html', schema_view),
 

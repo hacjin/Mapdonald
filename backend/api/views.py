@@ -31,3 +31,13 @@ class UserViewSet(viewsets.ModelViewSet):
         )
         return queryset
 
+class ReviewViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.ReviewSerializer
+    pagination_class = SmallPagination
+
+    def get_queryset(self):
+        store = self.request.query_params.get("store", "")
+        queryset = (
+            models.Review.objects.all().order_by("reg_time")
+        )
+        return queryset
