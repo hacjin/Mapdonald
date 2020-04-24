@@ -68,11 +68,9 @@ function FormDialog() {
               </StyledToggleButtonGroup>
             </Paper>
           </div>
-          <TextField autoFocus margin="dense" id="age" label="나이" type="text" />
+          <TextField autoFocus margin="dense" id="age" label="나이" type="number" />
           <br />
           <TextField autoFocus margin="dense" id="like" label="좋아하는음식" type="text" />
-          <br />
-          <TextField autoFocus margin="dense" id="unlike" label="싫어하는음식" type="text" />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

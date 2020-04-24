@@ -9,6 +9,7 @@ import apis from '../apis/apis'
 import ReviewCardlist from './ReviewCardlist';
 import Review from '../interface/Review';
 import Store from '../interface/Store';
+import './List.css'
 
 interface Props {
   open : boolean,
@@ -18,28 +19,28 @@ interface Props {
 
 export default function StoreDetailDialog(props : Props) {
   const { open, setOpen, store} = props
+  let result = ''
   function handleClose(){
     setOpen(false)
   }
   return (
     <div>
-      <Dialog open={open} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">음식점 정보</DialogTitle>
+      <Dialog  open={open} aria-labelledby="form-dialog-title">
+        <DialogTitle id="store-dialog-title">{store.store_name}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            음식점 이름
+            {store.area} | {store.category_list.map((element,i) => {
+              result+=`${element}`
+              if(i<store.category_list.length-1) result += `, `
+              else if(i===store.category_list.length)return ( {result}) 
+            })} <span id="store-category">{result}</span>
           </DialogContentText>
           {store ?
-            <div>
-              id : {store.id}<br/>
-              store_name : {store.store_name}<br/>
-              branch : {store.branch}<br/>
-              area : {store.area}<br/>
-              tel : {store.tel}<br/>
-              address : {store.address}<br/>
-              latitude : {store.latitude}<br/>
-              longitude : {store.longitude}<br/>
-              category_list : {store.category_list}
+            <div className="store-info">
+              <li className="locat">{store.address}</li>
+              <li className="tel">{store.tel}</li>
+              {/* <p>latitude : {store.latitude}</p>
+              <p>longitude : {store.longitude}</p> */}
             </div>
             : null
           }

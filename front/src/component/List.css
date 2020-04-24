@@ -11,6 +11,38 @@
   color: #000;
   text-decoration: none;
 }
+#store-category {
+  color: #222228;
+}
+.store-info {
+  padding-top: 20px;
+  background: #fff;
+  /* box-shadow: 1px 1px 3px #d8d8d8; */
+}
+.store-info li {
+  margin-bottom: 15px;
+  font-size: 15px;
+  color: #222228;
+  padding-left: 25px;
+  padding-top: 5px;
+  list-style: none;
+}
+.store-info li.locat{
+  background: url(https://s3-ap-northeast-1.amazonaws.com/dcicons/new/images/web/profile/profile-location@2x.png) no-repeat left;
+  background-size: 20px;
+}
+.store-info li.tel{
+  background: url(https://s3-ap-northeast-1.amazonaws.com/dcicons/new/images/web/profile/profile-pnum@2x.png) no-repeat left;
+  background-size: 20px;
+}
+#store-dialog-title h2 {
+  font-size: 35px;
+    color: #222228;
+    line-height: 44px;
+    font-weight: 600;
+    float: left;
+    letter-spacing: -0.03em;
+}
 .map_wrap {
   position: relative;
   width: 100%;

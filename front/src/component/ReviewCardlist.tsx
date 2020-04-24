@@ -13,14 +13,10 @@ export default function ReviewCardlist(props : Props){
   const [reviews, setReviews] = useState([])
   useEffect(() => {
     getReviewsAPI(storeId, setReviews)
-  },[])
+  })
 
   async function getReviewsAPI(storeId : number, setReviews : Function){
     const response = await apis.get(`/review?store=${storeId}`)
-    console.log('response')
-    console.log(response)
-    console.log('reviews')
-    console.log(response.data.results)
     setReviews(response.data.results)
   }
 
@@ -29,7 +25,7 @@ export default function ReviewCardlist(props : Props){
       { reviews.length !== 0 ? 
       reviews.map(review => {
         key+= 1
-        return <ReviewCard review={review} key={key}/>
+        return <ReviewCard review={review} key={key} />
       })
       :
       null
