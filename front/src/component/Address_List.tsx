@@ -222,7 +222,7 @@ function Address_List() {
 
           <div>
             <form onSubmit={searchPlaces}  className="m-key-div">
-              검색어 : <input type="text" id="keyword" style={{ fontSize: 15 }} />
+              키워드 : <input type="text" id="keyword" style={{ fontSize: 15 }} />
               <button type="submit">검색하기</button>
             </form>
           </div>
