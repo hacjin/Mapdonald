@@ -10,6 +10,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import './Main_dialog.css'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,10 +49,10 @@ function FormDialog() {
   const classes = useStyles()
   return (
     <div>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">안녕하세요</DialogTitle>
+      <Dialog  className="m-dialog" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle className="m-dialog-title" id="form-dialog-title">안녕하세요</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText className="m-dialog-content">
             더 정확한 맛집 추천을 위해
             <br />
             다음 정보를 입력해주세요
@@ -59,20 +60,20 @@ function FormDialog() {
           <div>
             <Paper elevation={0} className={classes.paper}>
               <StyledToggleButtonGroup size="small" value={alignment} exclusive onChange={handleAlignment} aria-label="text alignment">
-                <ToggleButton value="man" aria-label="man">
+                <ToggleButton className="m-gender-btn" value="man" aria-label="man">
                   남자
                 </ToggleButton>
-                <ToggleButton value="woman" aria-label="woman">
+                <ToggleButton className="m-gender-btn" value="woman" aria-label="woman">
                   여자
                 </ToggleButton>
               </StyledToggleButtonGroup>
             </Paper>
           </div>
-          <TextField autoFocus margin="dense" id="age" label="나이" type="number" />
+          <TextField className="m-info-field" autoFocus margin="dense" id="age" label="나이" type="number" />
           <br />
-          <TextField autoFocus margin="dense" id="like" label="좋아하는음식" type="text" />
+          <TextField className="m-info-field" autoFocus margin="dense" id="like" label="좋아하는음식" type="text" />
         </DialogContent>
-        <DialogActions>
+        <DialogActions className="m-margintop">
           <Button onClick={handleClose} color="primary">
             취소
           </Button>

@@ -3,6 +3,8 @@ import React, { useEffect, FormEvent, useState } from 'react'
 import apis from '../apis/apis'
 import Store from '../interface/Store'
 import StoreDetailDialog from './StoreDetailDialog'
+import './map.css'
+
 declare global {
   // kakao 변수가 스크립트 파일로 인하여 window 변수 안에 할당되는데, 타입스크립트 특성상 미리 타입에 대하여 선언을 해줘야 함
   interface Window {
@@ -428,14 +430,19 @@ export default function KakaoMap() {
           <div id="menu_wrap" className="bg_white">
             <div className="option">
               <b>찾고자 하는 주소를 입력해주세요</b>
-              <div>
+              <div className="m-key-div">
                 <form onSubmit={searchPlaces}>
-                  키워드 : <input type="text" id="keyword" size={15} onChange={keywordChange} />
-                  <button type="submit">검색하기</button>
+                  <input className="gsc-input" 
+                         type="text" 
+                         id="keyword" 
+                         size={15} 
+                         onChange={keywordChange}
+                         placeholder="검색할 단어"/>
+                  <button className="gsc-search-button" type="submit">검색</button>
                 </form>
               </div>
             </div>
-            <hr />
+            <div className="m-hr"/>
             <ul id="placesList"></ul>
             <div id="pagination"></div>
           </div>
