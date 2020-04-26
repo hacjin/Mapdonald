@@ -7,8 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            "id",
-            "name",
+            "like",
             "age",
             "gender",
             "latitude",
@@ -40,5 +39,4 @@ class ReviewSerializer(serializers.ModelSerializer):
             "content",
             "reg_time",
         ]
-
 

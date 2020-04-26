@@ -3,9 +3,9 @@ from django.db import models
 
 class User(models.Model):
     id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=50)
-    age = models.CharField(max_length=20, null=True)
-    gender = models.CharField(max_length=20, null=True)
+    like = models.CharField(max_length=50)
+    age = models.IntegerField(null=True)
+    gender = models.IntegerField(null=True)
     latitude = models.FloatField(max_length=10, null=True)
     longitude = models.FloatField(max_length=10, null=True)
 
