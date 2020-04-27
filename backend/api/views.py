@@ -49,8 +49,7 @@ def usersearch(request):
     longitude = json_data['longitude']
     longitude=float(longitude)
     ## 추천 알고리즘 넣고
-    store_list=tfidf_cosine.filtering(gender, age, latitude, longitude, like)
-    return HttpResponse(store_list)
+    return HttpResponse(tfidf_cosine.filtering(gender, age, latitude, longitude, like))
 
 
 

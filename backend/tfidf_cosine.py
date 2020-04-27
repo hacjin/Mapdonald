@@ -42,7 +42,6 @@ def tf_dtm():
             result[-1].append(tf(t, d))
 
     tf_ = pd.DataFrame(result, columns=vocab)
-    print(tf_)
 
 
 def idf_dtm():
@@ -67,8 +66,8 @@ def tfidf_dtm():
             result[-1].append(tfidf(t, d))
 
     tfidf_ = pd.DataFrame(result, columns=vocab)
-    print('tfdif_체크')
-    print(tfidf_)
+    # print('tfdif_체크')
+    # print(tfidf_)
 
 
 def filtering(gender, age, x, y, like):
@@ -109,8 +108,7 @@ def filtering(gender, age, x, y, like):
         data_final = data_final.reset_index(drop=True)
 
     # 유사도 함수 호출
-    d = sklearn_tfidf(data_final, like)
-    return d
+    return sklearn_tfidf(data_final, like)
 
 
 def sklearn_tfidf(dataframe, menu):
@@ -130,8 +128,8 @@ def sklearn_tfidf(dataframe, menu):
             if menu in m[0]:
                 if menu in docs[m[1]]:
                     idx = m[1]
-                    print('메뉴와 포함된 store_index')
-                    print(m[0], m[1])
+                    # print('메뉴와 포함된 store_index')
+                    # print(m[0], m[1])
                     break
         if idx == -1:
             indices = pd.Series(data['stores'].index,
@@ -150,9 +148,10 @@ def sklearn_tfidf(dataframe, menu):
     store_indices = [i[0] for i in sim_scores]
 
     df=data['stores'].iloc[store_indices]
-    store_list=df.values.tolist()
+    store_json=df.to_json(orient='records',force_ascii=False)
+    # print("갯수~ \n", store_json)
   
-    return store_list
+    return store_json
 
 
 # d = sklearn_tfidf('카페')
