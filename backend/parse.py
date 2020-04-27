@@ -1,8 +1,15 @@
 import json
+import numpy as np
 import pandas as pd
 import os
 import shutil
 import datetime
+import re
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+# nltk 사용시 에러 관련 참고사항
+# https://wikidocs.net/22488
 
 DATA_DIR = "../data"
 DATA_FILE = os.path.join(DATA_DIR, "data.json")
@@ -18,6 +25,7 @@ store_columns = (
     "latitude",  # 음식점 위도
     "longitude",  # 음식점 경도
     "category",  # 음식점 카테고리
+    "menu",  # 음식점 메뉴
 )
 bhour_columns = (
     "store",  # 음식점 고유번호
@@ -51,12 +59,13 @@ menu_columns = (
 )
 
 user_columns = (
+    "store",
     "id",  # 유저 고유번호
     "gender",  # 유저 성별
     "age",  # 유저 나이
 )
 
-cate_colums = (
+cate_columns = (
     "store",
     "category",
     "number"
@@ -77,41 +86,57 @@ def import_data(data_path=DATA_FILE):
 
     stores = []  # 음식점 테이블
     reviews = []  # 리뷰 테이블
-    menus = []  # 메뉴 테이블
+    # menus = []  # 메뉴 테이블
     users = []  # 유저 테이블
     bhours = []  # 영업시간 테이블
     cates = []
     dt = datetime.datetime.now().year
 
     category = {}
+    cateset = []
+    menuset = []
     num = 1
     for d in data:
-        categories = [c["category"] for c in d["category_list"]]
-        for cate in categories:
-            if cate in category:
-                category[cate] = category[cate]
-            else:
-                category[cate] = num
-                num += 1
-            cates.append([
-                d['id'],
-                cate,
-                category[cate]
-            ])
-        stores.append(
-            [
-                d["id"],
-                d["name"],
-                d["branch"],
-                d["area"],
-                d["tel"],
-                d["address"],
-                d["latitude"],
-                d["longitude"],
-                "|".join(categories),
-            ]
-        )
+
         if(d["review_cnt"] > 0):
+            categories = [c["category"] for c in d["category_list"]]
+            menus = [m["menu"] for m in d["menu_list"]]
+            s_menu = ''
+            for menu in menus:
+                s_menu += menu + ' '
+            # print(s_menu)
+            # 정규표현식으로 menu의 불필요한 부분 제거
+            result = re.split("[\+\(\)\/\<\>\[\]]", s_menu)
+            # print("메뉴 정규표현식 제거")
+            # print(result)
+
+            for cate in categories:
+                if cate in category:
+                    category[cate] = category[cate]
+                    cateset.append(cate)
+                else:
+                    cateset.append(cate)
+                    category[cate] = num
+                    num += 1
+                cates.append([
+                    d['id'],
+                    cate,
+                    category[cate]
+                ])
+            stores.append(
+                [
+                    d["id"],
+                    d["name"],
+                    d["branch"],
+                    d["area"],
+                    d["tel"],
+                    d["address"],
+                    d["latitude"],
+                    d["longitude"],
+                    " ".join(categories),
+                    " ".join(result)
+                ]
+            )
             for review in d["review_list"]:
                 r = review["review_info"]
                 u = review["writer_info"]
@@ -121,30 +146,38 @@ def import_data(data_path=DATA_FILE):
                         r["content"], r["reg_time"]]
                 )
                 users.append(
-                    [u["id"], u["gender"], dt - int(u["born_year"])+1]
+                    [d["id"], u["id"], u["gender"], dt - int(u["born_year"])+1]
                 )
 
-        index = 0
-        for m in d["menu_list"]:
-            index += 1
-            menus.append(
-                [index, d["id"], m["menu"], m["price"]]
-            )
+            index = 0
+            for m in d["menu_list"]:
+                menuset.append(m["menu"])
+                index += 1
+                # menus.append(
+                #     [index, d["id"], m["menu"], m["price"]]
+                # )
 
-        for b in d["bhour_list"]:
-            bhours.append(
-                [d["id"], b["type"], b["week_type"], b["mon"], b["tue"], b["wed"],
-                    b["thu"], b["fri"], b["sat"], b["sun"], b["start_time"], b["end_time"]]
-            )
-
+            for b in d["bhour_list"]:
+                bhours.append(
+                    [d["id"], b["type"], b["week_type"], b["mon"], b["tue"], b["wed"],
+                        b["thu"], b["fri"], b["sat"], b["sun"], b["start_time"], b["end_time"]]
+                )
+    # print(set(cateset), len(set(cateset)))
+    # print(cates)
+    # print(len(set(menuset)))
+    print(len(stores))
+    print(len(reviews))
+    # print(len(menus))
+    # print(menuset)
     cate_frame = pd.DataFrame(data=cates,
-                              columns=cate_colums)
+                              columns=cate_columns)
     store_frame = pd.DataFrame(data=stores, columns=store_columns)
     review_frame = pd.DataFrame(data=reviews, columns=review_columns)
-    menu_frame = pd.DataFrame(data=menus, columns=menu_columns)
+    # menu_frame = pd.DataFrame(data=menus, columns=menu_columns)
     user_frame = pd.DataFrame(data=users, columns=user_columns)
     bhour_frame = pd.DataFrame(data=bhours, columns=bhour_columns)
-    return {"stores": store_frame, "reviews": review_frame, "menus": menu_frame, "users": user_frame, "bhours": bhour_frame, "categories": cate_frame}
+    # return {"stores": store_frame, "reviews": review_frame, "menus": menu_frame, "users": user_frame, "bhours": bhour_frame, "categories": cate_frame, "cateset": cateset}
+    return {"stores": store_frame, "reviews": review_frame, "users": user_frame, "bhours": bhour_frame, "categories": cate_frame, "cateset": cateset}
 
 
 def dump_dataframes(dataframes):
@@ -177,13 +210,14 @@ def main():
 
     print("[리뷰]")
     print(f"{separater}\n")
-    print(data["reviews"].head())
+    print(data["reviews"])
+    print(data["reviews"].index.tolist)
     print(f"\n{separater}\n\n")
 
-    print("[메뉴]")
-    print(f"{separater}\n")
-    print(data["menus"].head())
-    print(f"\n{separater}\n\n")
+    # print("[메뉴]")
+    # print(f"{separater}\n")
+    # print(data["menus"].head())
+    # print(f"\n{separater}\n\n")
 
     print("[유저]")
     print(f"{separater}\n")
