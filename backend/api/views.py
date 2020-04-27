@@ -8,6 +8,7 @@ import practice
 import pandas as pd
 import os
 from rest_framework.response import Response
+import json
 
 
 class SmallPagination(PageNumberPagination):
@@ -30,12 +31,20 @@ class StoreViewSet(viewsets.ModelViewSet):
 
 
 def usersearch(request):
+    # print("리퀘스트", request.body)
+    json_data = json.loads(request.body)    
     # data=pd.read_pickle(os.path.join("../../data", "dump.pkl"))
-    like = request.POST['like']
-    age = int(request.POST['age'])
-    gender = int(request.POST['gender'])
-    latitude = float(request.POST['latitude'])
-    longitude = float(request.POST['longitude'])
+    # print("json", json_data)
+    like = json_data['likeFood']
+    # print("likeFood", like)
+    age = json_data['age']
+    age=int(age)
+    gender = json_data['gender']
+    age=int(gender)
+    latitude = json_data['latitude']
+    latitude=float(latitude)
+    longitude = json_data['longitude']
+    longitude=float(longitude)
     arr1=[like,age,gender,latitude,longitude]
     ## 추천 알고리즘 넣고
     arr=practice.main(like,age,gender,latitude,longitude)
