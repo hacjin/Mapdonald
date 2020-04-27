@@ -1,0 +1,95 @@
+/* 알고리즘 버튼 */
+.myButton {
+	background-color:#ededed;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#555555;
+	font-size:12px;
+	padding:9px 38px;
+	text-decoration:none;
+    text-shadow:0px 0px 0px #ffffff;
+    margin-top : 10px !important;
+    margin-bottom : 5px !important;
+}
+.myButton:hover {
+	background-color:#dfdfdf;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+
+/*맵리스트*/
+.m-key-div {
+    margin-top : 10px;
+    margin-bottom : 10px;
+}
+#menu_wrap {
+    border-radius:6px;
+    width: 300px;
+}
+.option{
+    padding-top : 10px;
+}
+
+/* 검색버튼 */
+.m-search {
+	background-color:#ededed;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#777777;
+	font-size:10px;
+	padding:5px 11px;
+	text-decoration:none;
+	text-shadow:0px 0px 0px #ffffff;
+}
+.m-search:hover {
+	background-color:#dfdfdf;
+}
+.m-search:active {
+	position:relative;
+	top:1px;
+}
+/* 스크롤바 */
+::-webkit-scrollbar {
+	background: transparent;
+	width: 6px;
+}
+::-webkit-scrollbar-thumb {
+	background-color: #adadad;
+	box-shadow: inset 0 0 2px #adadad;
+}
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+/* 검색창 */
+.gsc-input{
+    background-color:#fff;
+    border : 1px solid #cdcdcd;
+    padding:6px!important;
+    border-radius:5px 0 0 5px!important;
+    width: 65%;
+}
+input:focus {outline:none;}
+.gsc-search-button{
+    background-color : #adadad;
+    color : #fff;
+    margin-left:-1px!important;
+    border:2px solid #adadad;
+    padding:5px 10px 5px 5px;
+    border-radius:0 5px 5px 0;
+    cursor:pointer
+}
+
+/* 가로줄 */
+.m-hr{
+    width: 100%;
+    height: 1px;
+    background-color: #adadad;
+    margin-top : 22px;
+}
