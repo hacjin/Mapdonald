@@ -10,7 +10,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
-import './Main_dialog.css'
+import './FormDialog.css'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,22 +34,42 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
   },
 }))(ToggleButtonGroup)
 
-function FormDialog() {
-  const [open, setOpen] = React.useState(true)
-  const [alignment, setAlignment] = React.useState('')
+interface Props{
+  submit : Function,
 
-  const handleClose = () => {
+}
+function FormDialog(props : Props) {
+  const {submit} = props
+  const [open, setOpen] = React.useState(true)
+  const [gender, setGender] = React.useState(1) // 1 : 남 , 0 : 여
+  const [like, setLike] = React.useState('')
+  const [age, setAge] = React.useState(20)
+
+  function handleSubmit() {
     setOpen(false)
     let list: HTMLElement | null = document.getElementById('menu_wrap')
     if (list !== null) list.style.visibility = 'visible'
+    submit(gender, age, like)
   }
-  const handleAlignment = (event: any, newAlignment: any) => {
-    setAlignment(newAlignment)
+  const handleChange = (event : any) => {
+    const name = event.target.name
+    const value = event.target.value
+    switch(name){
+      case 'gender':
+        setGender(value)
+        break
+      case 'age':
+        setAge(value)
+        break
+      case 'like':
+        setLike(value)
+        break
+    }
   }
   const classes = useStyles()
   return (
     <div>
-      <Dialog  className="m-dialog" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog  className="m-dialog" open={open} onClose={handleSubmit} aria-labelledby="form-dialog-title">
         <DialogTitle className="m-dialog-title" id="form-dialog-title">안녕하세요</DialogTitle>
         <DialogContent>
           <DialogContentText className="m-dialog-content">
@@ -59,25 +79,22 @@ function FormDialog() {
           </DialogContentText>
           <div>
             <Paper elevation={0} className={classes.paper}>
-              <StyledToggleButtonGroup size="small" value={alignment} exclusive onChange={handleAlignment} aria-label="text alignment">
-                <ToggleButton className="m-gender-btn" value="man" aria-label="man">
+              <StyledToggleButtonGroup size="small" value={gender} exclusive onChange={handleChange} aria-label="text alignment">
+                <ToggleButton className="m-gender-btn" value={1} aria-label="man">
                   남자
                 </ToggleButton>
-                <ToggleButton className="m-gender-btn" value="woman" aria-label="woman">
+                <ToggleButton className="m-gender-btn" value={0} aria-label="woman">
                   여자
                 </ToggleButton>
               </StyledToggleButtonGroup>
             </Paper>
           </div>
-          <TextField className="m-info-field" autoFocus margin="dense" id="age" label="나이" type="number" />
+          <TextField className="m-info-field" autoFocus margin="dense" name="age" label="나이" type="number" value={age} onChange={handleChange}/>
           <br />
-          <TextField className="m-info-field" autoFocus margin="dense" id="like" label="좋아하는음식" type="text" />
+          <TextField className="m-info-field" autoFocus margin="dense" name="like" label="좋아하는음식" type="text" value={like} onChange={handleChange}/>
         </DialogContent>
         <DialogActions className="m-margintop">
-          <Button onClick={handleClose} color="primary">
-            취소
-          </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             확인
           </Button>
         </DialogActions>

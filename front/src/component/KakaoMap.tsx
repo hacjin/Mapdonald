@@ -4,6 +4,8 @@ import apis from '../apis/apis'
 import Store from '../interface/Store'
 import StoreDetailDialog from './StoreDetailDialog'
 import './map.css'
+import Nav from './Nav'
+import FormDialog from './FormDialog'
 
 declare global {
   // kakao 변수가 스크립트 파일로 인하여 window 변수 안에 할당되는데, 타입스크립트 특성상 미리 타입에 대하여 선언을 해줘야 함
@@ -28,6 +30,8 @@ export default function KakaoMap() {
   const [keyword, setKeyword] = useState("")
   const [version, setVersion] = useState(true) // true : 지역 선택, false : store 선택
   const [store, setStore] = useState<Store>() 
+  const [latitude, setLatitude] = useState(0)
+  const [longitude, setLongitude] = useState(0)
   const kakao = window.kakao
   useEffect(() => {
     console.log('useEffect')
@@ -52,6 +56,8 @@ export default function KakaoMap() {
   function geoSuccess(position: any) {
     const latitude = position.coords.latitude
     const longitude = position.coords.longitude
+    setLatitude(latitude)
+    setLongitude(longitude)
     moveMap(latitude, longitude)
     
     if(point){
@@ -417,15 +423,28 @@ export default function KakaoMap() {
       return <StoreDetailDialog open={detail} setOpen={setDetail} store={store}/>
     }
   }
+
+  async function handleSubmit(gender : boolean, age : number, like : string){
+    console.log('handlesubmit  ', gender, age, like, latitude, longitude)
+    const response = await apis.post(`/user`,{
+      latitude : latitude,
+      longitude : longitude,
+      age : age,
+      likeFood : like,
+      gender : gender
+    })
+    console.log(response)
+  }
   return (
     <div id="map_wraper">
       <div className="map_wrap">
+        <Nav/>
         <div id="map" style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
           <button id="location" onClick={getCurrentPosition}>
-            버튼
+            현재 위치
           </button>
         </div>
-
+        <FormDialog submit={handleSubmit}/>
         {version ?
           <div id="menu_wrap" className="bg_white">
             <div className="option">
