@@ -85,6 +85,7 @@ def filtering(gender, age, x, y, like):
         data["stores"], age_filtering, how='inner', left_on='id', right_on='store')
     filtering_df = filtering_df.rename(columns={"id_x": "id", "id_y": "user"})
     filtering_df = filtering_df.drop('store', axis=1)
+    filtering_df = filtering_df[filtering_df['latitude'].notna()]
 
     store_list = []
     store_id_list = []
@@ -132,8 +133,9 @@ def sklearn_tfidf(dataframe, menu):
                     # print(m[0], m[1])
                     break
         if idx == -1:
-            indices = pd.Series(data['stores'].index,
-                                index=data['stores']['menu']).drop_duplicates()
+            stores = data['stores']
+            stores = stores[stores['latitude'].notna()]
+            indices = pd.Series(stores.index,index=stores['menu']).drop_duplicates()
         else:
             break
 
