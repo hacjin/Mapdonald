@@ -30,12 +30,16 @@ export default function KakaoMap() {
   const [keyword, setKeyword] = useState("")
   const [version, setVersion] = useState(true) // true : 지역 선택, false : store 선택
   const [store, setStore] = useState<Store>() 
-  const [latitude, setLatitude] = useState(0)
-  const [longitude, setLongitude] = useState(0)
   const [gender, setGender] = useState(1)
   const [age, setAge] = useState(20)
   const [like, setLike] = useState('')
+  const [visible, setVisible] = useState(false)
   const kakao = window.kakao
+  
+  // const [latitude, setLatitude] = useState(DEFAULT_LATITUDE)
+  // const [longitude, setLongitude] = useState(DEFAULT_LONGITUDE)
+  let latitude = DEFAULT_LATITUDE
+  let longitude = DEFAULT_LONGITUDE
   useEffect(() => {
     console.log('useEffect')
     if(!map){  
@@ -57,10 +61,8 @@ export default function KakaoMap() {
   }
   // 현재 위치 정보 권한에 동의 받았을 때
   function geoSuccess(position: any) {
-    const latitude = position.coords.latitude
-    const longitude = position.coords.longitude
-    setLatitude(latitude)
-    setLongitude(longitude)
+    latitude = position.coords.latitude
+    longitude = position.coords.longitude
     moveMap(latitude, longitude)
     
     if(point){
@@ -95,8 +97,8 @@ export default function KakaoMap() {
     // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
     infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 })
 
-    const mapTypeControl = new kakao.maps.MapTypeControl() // 지도, 스카이뷰 컨트롤러
-    const zoomControl = new kakao.maps.ZoomControl() // 확대, 축소 컨트롤러
+    // const mapTypeControl = new kakao.maps.MapTypeControl() // 지도, 스카이뷰 컨트롤러
+    // const zoomControl = new kakao.maps.ZoomControl() // 확대, 축소 컨트롤러
 
     const wardImage = '/ward.png'
 
@@ -111,8 +113,8 @@ export default function KakaoMap() {
     })
 
     // 컨트롤러 붙이기
-    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT)
-    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT)
+    // map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT)
+    // map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT)
     point.setMap(map)
   }
 
@@ -139,6 +141,8 @@ export default function KakaoMap() {
 
   async function getStoreAPI(displayStores : Function){
     console.log('getStoreAPI')
+    console.log('latitude : ' + latitude)
+    console.log('longittude : ' + longitude)
     const result = await apis.post(`/user`,{
       gender : gender,
       age : age,
@@ -151,6 +155,32 @@ export default function KakaoMap() {
     const stores = result.data
     console.log(stores.length)
     console.log(stores)
+    // const stores = [
+    //     {
+    //       id : 33,
+    //       store_name : "노랑통닭",
+    //       branch : null,
+    //       area : "서울특별시 강남구 역삼동 논현로93길 4",
+    //       tel : "02-556-0205",
+    //       address : "서울특별시 강남구 역삼동 논현로93길 4",
+    //       latitude : 37.502182, 
+    //       longitude : 127.035771,
+    //       category : "치킨 통닭",
+    //     },
+    //     {
+    //       id : 34,
+    //       store_name : "노랑00닭",
+    //       branch : null,
+    //       area : "서울특별시 강남구 역삼동 논현로93길 4",
+    //       tel : "02-556-0205",
+    //       address : "서울특별시 강남구 역삼동 논현로93길 4",
+    //       latitude : 37.502200, 
+    //       longitude : 127.035200,
+    //       category : "치킨 통닭",
+    //     }
+
+
+    // ]
     displayStores(stores)
   }
 
@@ -221,8 +251,12 @@ export default function KakaoMap() {
           itemEl.onclick = function () {
             console.log(y, x)
             moveMap(y,x)
+            latitude = y
+            longitude = x
+            // setLatitude(y)
+            // setLongitude(x)
             console.log('version 이 false됨')
-            setVersion(false)
+            // setVersion(false)
             infowindow.close()
             // 검색 결과 목록에 추가된 항목들을 제거합니다
             removeAllChildNods(listEl)
@@ -445,6 +479,7 @@ export default function KakaoMap() {
     setAge(age)
     setGender(gender)
     setLike(like)
+    setVisible(!visible)
     // const response = await apis.post(`/user`,{
     //   latitude : latitude,
     //   longitude : longitude,
@@ -453,18 +488,25 @@ export default function KakaoMap() {
     //   gender : gender
     // })
   }
+
+  function visibleFunction(){
+    setVisible(!visible)
+  }
+
   return (
     <div id="map_wraper">
       <div className="map_wrap">
         <Nav/>
         <div id="map" style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
-          <button id="location" onClick={getCurrentPosition}>
-            내 주소로 찾기
-          </button>
+          
         </div>
         <FormDialog submit={handleSubmit}/>
+        <button onClick={visibleFunction} id="listButton">
+          {visible ? "리스트 닫기": "리스트 열기" }
+        </button>
         {version ?
-          <div id="menu_wrap" className="bg_white">
+          <>
+          <div id="menu_wrap" className="bg_white" style={{visibility : visible ? 'visible': 'hidden'}}>
             <div className="option">
               <b>찾고자 하는 주소를 입력해주세요</b>
               <div className="m-key-div">
@@ -483,11 +525,14 @@ export default function KakaoMap() {
             <ul id="placesList"></ul>
             <div id="pagination"></div>
           </div>
+          </>
           :
-          <div id="menu_wrap" className="bg_white">
-            <ul id="placesList"></ul>
-            <div id="pagination"></div>
-          </div>
+          <>
+            <div id="menu_wrap" className="bg_white">
+              <ul id="placesList"></ul>
+              <div id="pagination"></div>
+            </div>
+          </>
         }
         {detail && store ? 
           <StoreDetailDialog open={detail} setOpen={setDetail} store={store}/> 
