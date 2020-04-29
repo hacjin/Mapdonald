@@ -32,6 +32,9 @@ export default function KakaoMap() {
   const [store, setStore] = useState<Store>() 
   const [latitude, setLatitude] = useState(0)
   const [longitude, setLongitude] = useState(0)
+  const [gender, setGender] = useState(1)
+  const [age, setAge] = useState(20)
+  const [like, setLike] = useState('')
   const kakao = window.kakao
   useEffect(() => {
     console.log('useEffect')
@@ -75,6 +78,10 @@ export default function KakaoMap() {
   // 처음 카카오맵을 생성
   function makeMap() {
     const container = document.getElementById('map') //지도를 담을 영역의 DOM 레퍼런스
+    console.log('document')
+    console.log(document)
+    console.log('kakaommap - makemap - container')
+    console.log(container)
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: new kakao.maps.LatLng(DEFAULT_LATITUDE, DEFAULT_LONGITUDE), //지도의 중심좌표.
@@ -132,9 +139,17 @@ export default function KakaoMap() {
 
   async function getStoreAPI(displayStores : Function){
     console.log('getStoreAPI')
-    const result = await apis.get(`/stores/1`)
-    const stores = []
-    stores.push(result.data)
+    const result = await apis.post(`/user`,{
+      gender : gender,
+      age : age,
+      likeFood : like,
+      latitude : latitude,
+      longitude : longitude
+    })
+
+    console.log('==============================stores')
+    const stores = result.data
+    console.log(stores.length)
     console.log(stores)
     displayStores(stores)
   }
@@ -208,6 +223,12 @@ export default function KakaoMap() {
             moveMap(y,x)
             console.log('version 이 false됨')
             setVersion(false)
+            infowindow.close()
+            // 검색 결과 목록에 추가된 항목들을 제거합니다
+            removeAllChildNods(listEl)
+        
+            // 지도에 표시되고 있는 마커를 제거합니다
+            removeMarker()
             getStoreAPI(displayStores)
           }
         }
@@ -305,13 +326,14 @@ export default function KakaoMap() {
       itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' + '<div class="info">' + '   <h5>' + places.place_name + '</h5>'
 
     if (places.road_address_name) {
-      itemStr += '    <span>' + places.road_address_name + '</span>' + '   <span class="jibun gray">' + places.address_name + '</span>'
+      itemStr += '    <span>' + places.road_address_name + '</span>'
     } else {
       itemStr += '    <span>' + places.address_name + '</span>'
     }
 
-    itemStr += '  <span class="tel">' + places.phone + '</span>' + '</div>'
-
+    if(places.phone){
+      itemStr += '  <span class="tel">' + places.phone + '</span>' + '</div>'
+    }
     el.innerHTML = itemStr
     el.className = 'item'
 
@@ -418,22 +440,18 @@ export default function KakaoMap() {
     )
   }
 
-  function retDetail(){
-    if(detail && store){
-      return <StoreDetailDialog open={detail} setOpen={setDetail} store={store}/>
-    }
-  }
-
-  async function handleSubmit(gender : boolean, age : number, like : string){
+  async function handleSubmit(gender : number, age : number, like : string){
     console.log('handlesubmit  ', gender, age, like, latitude, longitude)
-    const response = await apis.post(`/user`,{
-      latitude : latitude,
-      longitude : longitude,
-      age : age,
-      likeFood : like,
-      gender : gender
-    })
-    console.log(response)
+    setAge(age)
+    setGender(gender)
+    setLike(like)
+    // const response = await apis.post(`/user`,{
+    //   latitude : latitude,
+    //   longitude : longitude,
+    //   age : age,
+    //   likeFood : like,
+    //   gender : gender
+    // })
   }
   return (
     <div id="map_wraper">
@@ -441,7 +459,7 @@ export default function KakaoMap() {
         <Nav/>
         <div id="map" style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
           <button id="location" onClick={getCurrentPosition}>
-            현재 위치
+            내 주소로 찾기
           </button>
         </div>
         <FormDialog submit={handleSubmit}/>
@@ -471,7 +489,11 @@ export default function KakaoMap() {
             <div id="pagination"></div>
           </div>
         }
-        {retDetail()}
+        {detail && store ? 
+          <StoreDetailDialog open={detail} setOpen={setDetail} store={store}/> 
+          :
+          null
+        }
       </div>
     </div>
   )
