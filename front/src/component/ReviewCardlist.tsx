@@ -13,7 +13,7 @@ export default function ReviewCardlist(props : Props){
   const [reviews, setReviews] = useState([])
   useEffect(() => {
     getReviewsAPI(storeId, setReviews)
-  })
+  },[storeId])
 
   async function getReviewsAPI(storeId : number, setReviews : Function){
     const response = await apis.get(`/review?store=${storeId}`)
@@ -28,7 +28,7 @@ export default function ReviewCardlist(props : Props){
         return <ReviewCard review={review} key={key} />
       })
       :
-      null
+        <span>리뷰가 없습니다.</span>
       }
     </div>
   )

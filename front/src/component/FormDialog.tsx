@@ -51,13 +51,13 @@ function FormDialog(props : Props) {
     if (list !== null) list.style.visibility = 'visible'
     submit(gender, age, like)
   }
+  const toggleChange = (event : any, value : number) => {
+    setGender(value)
+  }
   const handleChange = (event : any) => {
     const name = event.target.name
     const value = event.target.value
     switch(name){
-      case 'gender':
-        setGender(value)
-        break
       case 'age':
         setAge(value)
         break
@@ -79,11 +79,11 @@ function FormDialog(props : Props) {
           </DialogContentText>
           <div>
             <Paper elevation={0} className={classes.paper}>
-              <StyledToggleButtonGroup size="small" value={gender} exclusive onChange={handleChange} aria-label="text alignment">
-                <ToggleButton className="m-gender-btn" value={1} aria-label="man">
+              <StyledToggleButtonGroup size="small" value={gender} exclusive onChange={toggleChange} aria-label="text alignment">
+                <ToggleButton className="m-gender-btn" name="gender" value={1} aria-label="man">
                   남자
                 </ToggleButton>
-                <ToggleButton className="m-gender-btn" value={0} aria-label="woman">
+                <ToggleButton className="m-gender-btn" name="gender" value={0} aria-label="woman">
                   여자
                 </ToggleButton>
               </StyledToggleButtonGroup>

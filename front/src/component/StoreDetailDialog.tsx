@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useRef} from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -11,10 +11,11 @@ import Review from '../interface/Review';
 import Store from '../interface/Store';
 import './List.css'
 
+
 interface Props {
   open : boolean,
   setOpen : Function,
-  store : Store
+  store : Store,
 }
 
 export default function StoreDetailDialog(props : Props) {
@@ -23,16 +24,18 @@ export default function StoreDetailDialog(props : Props) {
   function handleClose(){
     setOpen(false)
   }
+
+  const category_list = store.category.split(' ')
   return (
     <div>
       <Dialog  open={open} aria-labelledby="form-dialog-title">
         <DialogTitle id="store-dialog-title">{store.store_name}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {store.area} | {store.category_list.map((element,i) => {
+            {store.area} | {category_list.map((element,i) => {
               result+=`${element}`
-              if(i<store.category_list.length-1) result += `, `
-              else if(i===store.category_list.length)return ( {result}) 
+              if(i<category_list.length-1) result += `, `
+              else if(i===category_list.length)return ( {result}) 
             })} <span id="store-category">{result}</span>
           </DialogContentText>
           {store ?
@@ -45,7 +48,7 @@ export default function StoreDetailDialog(props : Props) {
             : null
           }
           <br/>
-          <ReviewCardlist storeId={145030}/>
+          <ReviewCardlist storeId={store.id}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

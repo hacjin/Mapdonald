@@ -7,5 +7,5 @@ export default interface Store{
   address : String,
   latitude : number,
   longitude : number,
-  category_list : Array<String>,
+  category : String,
 }
