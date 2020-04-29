@@ -10,12 +10,15 @@ router = DefaultRouter(
     trailing_slash=False
 )
 router.register(r"stores", views.StoreViewSet, basename="stores")
-router.register(r'user', views.UserViewSet, basename="user")
+# router.register(r'user', views.usersearch, basename="user")
+router.register(r'review', views.ReviewViewSet, basename="review")
+
 urlpatterns = [
     url(r'swagger-ui.html', schema_view),
-
+    url(r'^user', views.usersearch),
+    url(r'^review/(?P<store>.+)/$',views.ReviewViewSet_findStore),
 ]
-## http://127.0.0.1:8000/api/swagger-ui.html 로 접속하면 가능해짐.
+    # /swagger-ui.html 로 접속하면 가능해짐.
 ## python manage.py runserver
 
 urlpatterns += router.urls
