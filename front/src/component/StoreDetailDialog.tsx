@@ -31,7 +31,9 @@ export default function StoreDetailDialog(props : Props) {
     const container = document.getElementById('storemap') //지도를 담을 영역의 DOM 레퍼런스
     console.log('useeffect container')
     console.log(container)
-    return () => makeMap()
+    if(!map){
+      makeMap()
+    }
     // if(!map){  
     //   makeMap()
     //   // 현재 위치정보 권한 요청
