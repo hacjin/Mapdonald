@@ -149,7 +149,9 @@ def sklearn_tfidf(dataframe, menu):
 
     store_indices = [i[0] for i in sim_scores]
 
-    df=data['stores'].iloc[store_indices]
+    df = data['stores']
+    df = df[df['latitude'].notna()]
+    df= df.iloc[store_indices]
     store_json=df.to_json(orient='records',force_ascii=False)
     # print("갯수~ \n", store_json)
   
