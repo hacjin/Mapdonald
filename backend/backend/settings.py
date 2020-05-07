@@ -40,12 +40,20 @@ INSTALLED_APPS = [
     "rest_framework",
     "api",
     'rest_framework_swagger',
+<<<<<<< HEAD
     'corsheaders',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+=======
+    "corsheaders",
+]
+
+MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+>>>>>>> 8fff11047f5218f2548bc32abacbb7987811d9c5
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
