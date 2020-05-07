@@ -15,64 +15,25 @@ declare global {
 }
 
 // 디폴트 역삼역
-const DEFAULT_LATITUDE = 37.501392
-const DEFAULT_LONGITUDE = 127.039648
+const DEFAULT_LATITUDE =  37.501392
+const DEFAULT_LONGITUDE =  127.039648
 
-let map: any
-var ps: any
-let infowindow: any
-let point: any // 내 위치
-export default function KakaoMap() {
-  console.log('kakaoMap')
-  let watchId: number
-  var markers: Array<any> = []
-  const [detail, setDetail] = useState(false)
-  const [keyword, setKeyword] = useState("")
-  const [version, setVersion] = useState(true) // true : 지역 선택, false : store 선택
-  const [store, setStore] = useState<Store>() 
-  const [gender, setGender] = useState(1)
-  const [age, setAge] = useState(20)
-  const [like, setLike] = useState('')
-  const [visible, setVisible] = useState(false)
-  const kakao = window.kakao
-  
-  // const [latitude, setLatitude] = useState(DEFAULT_LATITUDE)
-  // const [longitude, setLongitude] = useState(DEFAULT_LONGITUDE)
-  let latitude = DEFAULT_LATITUDE
-  let longitude = DEFAULT_LONGITUDE
-  useEffect(() => {
-    console.log('useEffect')
-    if(!map){  
+export default function KakaoMap(){
+
+    let map : any;
+    const kakao = window.kakao
+    useEffect(() => { 
       makeMap()
       // 현재 위치정보 권한 요청
-      getCurrentPositionPermission()
-    }
-  })
-  // watchposition 함수를 이용해 위치 정보 갱신 - 클릭 이벤트 https://unikys.tistory.com/375
+      navigator.geolocation.getCurrentPosition(geoSuccess)
+    })
 
-
-  function getCurrentPositionPermission(){    
-    navigator.geolocation.getCurrentPosition(geoSuccess)
-    getCurrentPosition()
-  }
-
-  function getCurrentPosition(){
-    watchId = navigator.geolocation.watchPosition(geoSuccess)
-  }
-  // 현재 위치 정보 권한에 동의 받았을 때
-  function geoSuccess(position: any) {
-    latitude = position.coords.latitude
-    longitude = position.coords.longitude
-    moveMap(latitude, longitude)
-    
-    if(point){
-      point.setPosition(new kakao.maps.LatLng(latitude, longitude))
-    }else{
-      point = new kakao.maps.Marker({
-        position : new kakao.maps.LatLng(latitude, longitude),
-        image : point
-      })
-      point.setMap(map)
+    // 현재 위치 정보 권한에 동의 받았을 때
+    function geoSuccess (position : any){
+        const latitude = position.coords.latitude 
+        const longitude = position.coords.longitude 
+        
+        moveMap(latitude, longitude)
     }
     navigator.geolocation.clearWatch(watchId)
   }
@@ -472,74 +433,5 @@ export default function KakaoMap() {
     setKeyword(
       (document.getElementById('keyword') as HTMLInputElement).value
     )
-  }
-
-  async function handleSubmit(gender : number, age : number, like : string){
-    console.log('handlesubmit  ', gender, age, like, latitude, longitude)
-    setAge(age)
-    setGender(gender)
-    setLike(like)
-    setVisible(!visible)
-    // const response = await apis.post(`/user`,{
-    //   latitude : latitude,
-    //   longitude : longitude,
-    //   age : age,
-    //   likeFood : like,
-    //   gender : gender
-    // })
-  }
-
-  function visibleFunction(){
-    setVisible(!visible)
-  }
-
-  return (
-    <div id="map_wraper">
-      <div className="map_wrap">
-        <Nav/>
-        <div id="map" style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
-          
-        </div>
-        <FormDialog submit={handleSubmit}/>
-        <button onClick={visibleFunction} id="listButton">
-          {visible ? "리스트 닫기": "리스트 열기" }
-        </button>
-        {version ?
-          <>
-          <div id="menu_wrap" className="bg_white" style={{visibility : visible ? 'visible': 'hidden'}}>
-            <div className="option">
-              <b>찾고자 하는 주소를 입력해주세요</b>
-              <div className="m-key-div">
-                <form onSubmit={searchPlaces}>
-                  <input className="gsc-input" 
-                         type="text" 
-                         id="keyword" 
-                         size={15} 
-                         onChange={keywordChange}
-                         placeholder="검색할 단어"/>
-                  <button className="gsc-search-button" type="submit">검색</button>
-                </form>
-              </div>
-            </div>
-            <div className="m-hr"/>
-            <ul id="placesList"></ul>
-            <div id="pagination"></div>
-          </div>
-          </>
-          :
-          <>
-            <div id="menu_wrap" className="bg_white">
-              <ul id="placesList"></ul>
-              <div id="pagination"></div>
-            </div>
-          </>
-        }
-        {detail && store ? 
-          <StoreDetailDialog open={detail} setOpen={setDetail} store={store}/> 
-          :
-          null
-        }
-      </div>
-    </div>
-  )
 }
+
