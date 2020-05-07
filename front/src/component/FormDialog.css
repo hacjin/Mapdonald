@@ -1,0 +1,23 @@
+.m-dialog-title{
+    text-align: center;
+}
+.m-dialog-content{
+    text-align: center;
+}
+.m-dialog{
+    padding-left : 50px;
+    padding-right: 50px;
+}
+.m-gender-btn{
+    width: 50%;
+}
+.MuiToggleButtonGroup-root{
+    width: 100%;
+}
+.m-info-field{
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+}
+.m-margintop{
+    margin-top : 15px !important;
+}

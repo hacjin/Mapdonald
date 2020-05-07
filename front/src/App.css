@@ -15,19 +15,48 @@
 
 .App-header {
   background-color: #282c34;
+  min-width: 100vw;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
 }
-
+.App-header #map_wraper {
+  width: 100vw;
+  height: 100vh;
+}
+#nav_wraper {
+  position: absolute;
+  z-index: 2;
+  right: 5vw;
+  top: 5vh;
+}
+#nav_wraper button {
+  display: block;
+  width: fit-content;
+  margin: 15px auto 15px auto;
+}
 .App-link {
   color: #61dafb;
 }
+#location {
+  position: absolute;
+  z-index: 3;
+  right: 12vw;
+  top: 1.2vh;
+  padding: 1px 6px 1px 6px;
+}
 
+#listButton {
+  position: absolute;
+  z-index: 3;
+  left: 1vw;
+  top: 1.2vh;
+  padding: 1px 6px 1px 6px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
