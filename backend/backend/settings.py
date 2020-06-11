@@ -25,7 +25,7 @@ SECRET_KEY = "$yg2c-8-8cszt%3k$b=3wwc^j1g%gn)wj%yldz)6jd(ez80u-s"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["13.124.143.208","127.0.0.1"]
+ALLOWED_HOSTS = ["13.124.143.208", "127.0.0.1"]
 
 
 # Application definition
@@ -40,20 +40,12 @@ INSTALLED_APPS = [
     "rest_framework",
     "api",
     'rest_framework_swagger',
-<<<<<<< HEAD
     'corsheaders',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-=======
-    "corsheaders",
-]
-
-MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
->>>>>>> 8fff11047f5218f2548bc32abacbb7987811d9c5
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -145,4 +137,5 @@ PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.MD5PasswordHasher",
     "django.contrib.auth.hashers.CryptPasswordHasher",
 )
-REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'}
