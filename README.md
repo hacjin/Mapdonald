@@ -1,3 +1,8 @@
+### 데이터
+
+- 사용된 데이터의 경우 SSAFY에서 제공해준 유료데이터로 비포함
+- 결과물 확인 => 시연영상
+
 #### 빅데이터 sub2
 
 > Front 프로젝트 생성 참고 : https://github.com/microsoft/TypeScript-React-Starter
