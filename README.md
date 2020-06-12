@@ -14,7 +14,7 @@
 ![와프2](./document/특화_와이어프레임2.png)
 
 ## 시퀀스 다이어그램
-![시다](document/시퀀스&#32;다이어그램.png)
+![시다](document/시퀀스 다이어그램.png)
 
 
 
@@ -72,101 +72,3 @@
 
 
 ```
-
-
-
-
-
-> 작성자 : 이학진
-
-## 쿠버네티스 아키텍처
-
-> 출처: https://bcho.tistory.com/1258 [조대협의 블로그]
-
-- 마스터(Master) 와 노드(Node) 두개의 컴포넌트로 분리
-
-- #### 마스터
-
-  - 쿠버네티스의 설정 환경을 저장하고 전체 클러스터를 관리하는 역할
-
-  1. ##### API 서버
-
-     - 모든 기능들을 REST API로 제공하고 그에 대한 명령을 처리
-
-  2. ##### Scheduler
-
-     - Pod, 서비스 등 각 리소스들을 적절한 노드에 할당하는 역할
-
-  3. ##### Controller Manager
-
-     - 컨트롤러( Replica controller, Service controller, Volume Controller, Node controller 등 )를 생성하고 이를 각 노드에 배포하며 관리하는 역할
-
-  4. ##### etcd
-
-     - 클러스터의 데이터베이스 역할이 되는 서버로 설정값이나 클러스터의 상태를 저장하는 서버
-     - [분산형 Key/Value 스토어 오픈소스](https://github.com/etcd-io/etcd)
-
-  5. ##### DNS
-
-     - 그림에는 빠져있는데, 쿠버네티스는 리소스의 엔드포인트(Endpoint)를 DNS로 맵핑하고 관리한다. 
-     - Pod나 서비스등은 IP를 배정받는데, 동적으로 생성되는 리소스이기 때문에 그 IP 주소가 그때마다 변경이 되기 때문에, 그 리소스에 대한 위치 정보가 필요한데, 이러한 패턴을 Service discovery 패턴이라고 하는데, 쿠버네티스에서는 이를 내부 DNS서버를 두는 방식으로 해결하였다.
-
-     - 새로운 리소스가 생기면, 그 리소스에 대한 IP와 DNS 이름을 등록하여, DNS 이름을 기반으로 리소스에 접근할 수 있도록 한다.
-
-- #### 노드
-
-  - pod ( 쿠버네티스 객체 모델 중 가장 작은 배포가능한 객체 )나 컨테이너처럼 쿠버네티스 위에서 동작하는 워크로드를 호스팅하는 역할
-
-  1. ##### Kubelet
-
-     - 노드에 배포되는 에이전트
-     - 마스터의 API서버와 통신 하면서, 노드가 수행해야 할 명령을 받아서 수행, 반대로 노드의 상태 등을 마스터로 전달하는 역할
-
-  2. ##### Kube-Proxy
-
-     - 노드로 들어오는 네트워크 트래픽을 적절한 컨테이너로 라우팅하고, 로드밸런싱 등 노드로 들어오고 나가는 네트워크 트래픽을 프록시하고, 노드와 마스터간의 네트워크 통신을 관리
-
-  3. ##### Container runtime ( 컨테이너 런타임 )
-
-     - Pod를 통해서 배포된 컨테이너를 실행하는 컨테이너 런타임
-     - 도커 컨테이너를 생각하기 쉬운데, 도커 이외에도 rkt (보안이 강화된 컨테이너), Hyper container 등 다양한 런타임이 있다.
-
-  4. ##### cAdvisor
-
-     - 각 노드에서 기동되는 모니터링 에이전트
-     - 노드내에서 가동되는 컨테이너들의 상태와 성능등의 정보를 수집하여, 마스터 서버의 API 서버로 전달한다.
-     - 이 데이터들은 주로 모니터링을 위해서 사용된다.
-
-![](https://t1.daumcdn.net/cfile/tistory/998670455B140DE22B)
-
-#### CI/CD (지속적 통합/ 지속적 제공) 활용해보기
-
-> 출처 : [CI/CD란?](https://www.redhat.com/ko/topics/devops/what-is-ci-cd)
-
-- ##### CI 란?
-
-  - 개발자를 위한 자동화 프로세스인 지속적인 통합을 의미
-  - 새로운 코드 변경 사항이 정기적으로 빌드 및 테스트되어 공유 리포지토리에 통합되므로 여러 명의 개발자가 동시에 애플리케이션 개발과 관련된 코드 작업을 할 경우 서로 충돌할 수 있는 문제를 해결할 수 있다.
-
-- ##### CD 란?
-
-  - 지속적인 서비스 제공 및 지속적인 배포를 의미
-  - 파이프라인의 추가 단계에 대한 자동화를 뜻한다
-  - 개발자들이 애플리케이션에 적용한 변경 사항이 버그 테스트를 거쳐 리포지토리에 자동으로 업로드되는 것을 뜻하며, 실시간 프로덕션 환경으로 배포할 수 있습니다.
-
-![](https://www.redhat.com/cms/managed-files/ci-cd-flow-mobile_0.png)
-
-#### k3s ( 경량화 kubernetes )
-
-> 출처 : 
->
-> - [참고](https://si.mpli.st/dev/2020-01-01-easy-k8s-with-k3s/)
->
-> - [CI/CD 튜토리얼]([https://velog.io/@wickedev/Gitlab-CICD-%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC-bljzphditt](https://velog.io/@wickedev/Gitlab-CICD-튜토리얼-bljzphditt))
->
-> - [k3s](https://medium.com/better-programming/using-a-k3s-kubernetes-cluster-for-your-gitlab-project-b0b035c291a9)
-
-##### 현재진행사항
-
-- k3s 서버에 설치 완료
-- 제대로된 사용시 k3s 링크를 참고해 gitlab에 클러스터 추가해야함.
