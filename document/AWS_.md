@@ -11,33 +11,12 @@ joomation.com - FE 포트폴리오 참고 사이트
 2) 서버를 Shutdown 하는 경우 학생들이 다시 켤 방법은 없습니다..
    리부팅이  필요한 경우 "sudo shutdown  -r now" 명령을 사용합니다.
 3) 서버의 IP 및 접근 가능 Port는 다음 URL에서 확인  가능합니다.
-   https://s.ssafy.io/aws/servers.html
    ※ 허용포트: 22, 80, 443, 3000-3999, 8000-8999, 5000
 
 > [접속 방법]
 > `ssh -i '팀인증서.pem' ubuntu@공인IP`
-> 예) 서울 1반 1팀의 경우
->      인증서 파일명 : T02A101.pem 
->      접속 IP(Public Ip) : https://s.ssafy.io/aws/servers.html 에서 인증서 파일 "T02A01" 검색
->      접속 명령어 : ssh -i 'T02A101.pem' ubuntu@13.124.67.187
-> ※ putty 를 사용하는 경우 ppk파일로 인증서 변환이 필요합니다.(putty 전용 인증서 포맷)
+> > ※ putty 를 사용하는 경우 ppk파일로 인증서 변환이 필요합니다.(putty 전용 인증서 포맷)
 >   변환 및 접속 방법은 다음을 참고하세요. : https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/putty.html
-
-
-
-## 우리 서버 정보
-
-| 컬럼명           | 밸류                               |
-| ---------------- | ---------------------------------- |
-| 인증파일명       | J02A102.pem                        |
-| VM name          | I02A102                            |
-| SSH key          | J02A102                            |
-| Public Ip        | 13.124.143.208                      |
-| Private Ip       | 172.26.6.20                       |
-| 사용가능한 ports | 22,80,443,1024-65535 |
-
-
-
 
 
 ---
@@ -151,7 +130,7 @@ $ y
 
 2. root 비밀번호 설정
 
-   비밀번호 : ssafy
+   비밀번호 : "정해놓은 비밀번호"
 
 3. 설치 확인/ mysql 실행여부 확인
 
@@ -189,13 +168,6 @@ $ mysql -u root -p ssafy
 
 
 #### workbench에서 AWS접속
-
-| 필드명   | 값            |
-| -------- | ------------- |
-| hostname | 13.209.18.252 |
-| port     | 3306          |
-| password | ssafy         |
-
 
 
 기타메모
