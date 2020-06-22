@@ -58,7 +58,7 @@ joomation.com - FE 포트폴리오 참고 사이트
 
    | 박스명                                         | 필드명                   | 값                   |
    | ---------------------------------------------- | ------------------------ | -------------------- |
-   | Specify the destination you want to connect to | Host Name(or IP address) | ubuntu@13.124.143.208 |
+   | Specify the destination you want to connect to | Host Name(or IP address) | ubuntu@"ip정보" |
    | "                                              | Port                     | 22                   |
    | "                                              | Connection type:         | SSH                  |
 
